@@ -1,0 +1,10 @@
+*.db
+*.log
+.idea
+songs
+__pycache__
+devnotes.txt
+*.pyc
+/dist/
+/*.egg-info
+node_modules

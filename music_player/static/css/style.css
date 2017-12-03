@@ -1,0 +1,10 @@
+body {
+  padding-top: 60px;
+}
+.hand {
+  cursor: pointer;
+  cursor: hand;
+}
+.topHeader {
+  margin-bottom:20px;
+}

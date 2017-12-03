@@ -1,0 +1,161 @@
+swagger: "2.0"
+info:
+  version: "1.0.0"
+  title: "Music Player"
+schemes:
+- "http"
+paths:
+  /songs:
+    get:
+      summary: "Retrieve a list of songs"
+      produces:
+      - "application/json"
+      responses:
+        200:
+          description: "Successful Response"
+          schema:
+            type: object
+            properties:
+              songs:
+                type: array
+                items:
+                  $ref: "#/definitions/Song"
+
+  /songs/{songId}:
+    get:
+      summary: "Play a song"
+      produces:
+      - "application/json"
+      parameters:
+        - $ref: "#/parameters/songIdPathParam"
+      responses:
+        200:
+          description: "Successful Response"
+          schema:
+            type: object
+            properties:
+              song:
+                $ref: "#/definitions/Song"
+
+
+  /albums:
+    get:
+      summary: "Retrieve a list of albums"
+      produces:
+      - "application/json"
+      responses:
+        200:
+          description: "Successful Response"
+          schema:
+            type: object
+            properties:
+              albums:
+                type: array
+                items:
+                  $ref: "#/definitions/Album"
+
+  /albums/{albumId}:
+    get:
+      summary: "Play an album"
+      produces:
+      - "application/json"
+      parameters:
+        - $ref: "#/parameters/albumIdPathParam"
+      responses:
+        200:
+          description: "Successful Response"
+          schema:
+            type: object
+            properties:
+              album:
+                $ref: "#/definitions/Album"
+              songs:
+                type: array
+                items:
+                  $ref: "#/definitions/Song"
+
+  /artists:
+    get:
+      summary: "Retrieve a list of artists"
+      produces:
+      - "application/json"
+      responses:
+        200:
+          description: "Successful Response"
+          schema:
+            type: object
+            properties:
+              artists:
+                type: array
+                items:
+                  $ref: "#/definitions/Artist"
+
+  /artists/{artistId}:
+    get:
+      summary: "Retrieve an artist"
+      produces:
+      - "application/json"
+      parameters:
+        - $ref: "#/parameters/artistIdPathParam"
+      responses:
+        200:
+          description: "Successful Response"
+          schema:
+            type: object
+            properties:
+              artist:
+                $ref: "#/definitions/Artist"
+              albums:
+                type: array
+                items:
+                  $ref: "#/definitions/Album"
+
+  /stop:
+    get:
+      summary: "Stop song"
+      produces:
+      - "application/json"
+      responses:
+        200:
+          description: "Successful Response"
+
+definitions:
+  Song:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+      title:
+        type: "string"
+  Album:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+      title:
+        type: "string"
+
+  Artist:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+      name:
+        type: "string"
+
+parameters:
+  songIdPathParam:
+    name: songId
+    in: path
+    type: string
+    required: true
+  albumIdPathParam:
+    name: albumId
+    in: path
+    type: string
+    required: true
+  artistIdPathParam:
+    name: artistId
+    in: path
+    type: string
+    required: true
