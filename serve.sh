@@ -1,1 +1,0 @@
-cd music_player && npm start

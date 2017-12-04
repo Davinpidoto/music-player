@@ -3,7 +3,7 @@ var app = express();
 var path = require("path");
 var bodyParser = require('body-parser')
 
-app.use(express.static('static'));
+app.use(express.static('music_player/static'));
 app.use(bodyParser.json());
 
 app.get('/', function(req,res){
