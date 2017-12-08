@@ -2,7 +2,7 @@ from sqlalchemy import *
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.orm import relationship
 from sqlalchemy.ext.declarative import declarative_base
-from music_player.formatting import JsonSerializableBase
+from music_player.json_encoder import JsonSerializableBase
 import os
 
 Base = declarative_base(cls=(JsonSerializableBase,))
@@ -58,9 +58,10 @@ class MysqlDao:
         return album
 
     @staticmethod
-    def get_song(song_id):
+    def get_song_path(song_id):
         session = MysqlDao.get_session()
-        result = session.execute('SELECT group_concat( concat( name, "/",albums.title,"/",file )) FROM songs join albums on songs.album_id = albums.id inner join artists on albums.artist_id = artists.id where songs.id = ' + song_id + ';')
+        result = session.execute("""SELECT group_concat( concat( name, "/",albums.title,"/",file )) FROM songs join albums on songs.album_id = 
+        albums.id inner join artists on albums.artist_id = artists.id where songs.id = """ + song_id + ';')
         rows = []
         for row in result:
             rows.append(row[0])

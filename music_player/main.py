@@ -10,7 +10,7 @@ from flask_cors import CORS
 app = Flask(__name__)
 CORS(app)
 service = Service()
-print("Sound Card is %s" % Config.SOUND_CARD)
+print("Sound Card: %s" % Config.SOUND_CARD)
 
 
 @app.route('/')
@@ -26,6 +26,11 @@ def js(path):
 @app.route('/css/<path:path>')
 def css(path):
     return send_from_directory('static/css', path)
+
+
+@app.route('/fonts/<path:path>')
+def fonts(path):
+    return send_from_directory('static/fonts', path)
 
 
 @app.route('/artists')

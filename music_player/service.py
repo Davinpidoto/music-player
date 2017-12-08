@@ -14,7 +14,6 @@ class Service:
         else:
             self.player = LinuxPlayer()
         self.dao = MysqlDao()
-        self.playlist_thread = ""
         self.song_queue = queue.Queue()
 
     def get_artists(self):
@@ -24,33 +23,32 @@ class Service:
         return self.dao.get_artist(artist_id)
 
     def stop(self):
-        if self.playlist_thread.is_alive():
-            self.song_queue.__init__()
+        if threading.active_count() > 1:
             self.player.stop()
-            self.playlist_thread.join()
-        self.player.stop()
 
     def play_song(self, song_id):
-        self.player.stop()
-        song = self.dao.get_song(song_id)
-        self.player.play_song(song)
-        return 'Playing'
-
-    def play_play_list(self):
-        if self.song_queue == "" or self.song_queue.empty():
-            return
-        self.player.play_song_blocking(self.song_queue.get())
-        return self.play_play_list()
+        self.clear()
+        self.song_queue.put(self.dao.get_song_path(song_id))
+        self.play_play_list()
+        return song_id
 
     def play_album(self, album_id):
+        self.clear()
         album_to_play = self.dao.get_album(album_id)
-
         for song in album_to_play.songs:
-            s = self.dao.get_song(str(song.id))
+            s = self.dao.get_song_path(str(song.id))
             self.song_queue.put(s)
+        self.play_play_list()
+        return album_to_play.title
 
-        self.player.stop()
-        self.playlist_thread = threading.Thread(target=self.play_play_list, args=[])
-        self.playlist_thread.start()
+    def clear(self):
+        self.song_queue = queue.Queue()
+        self.stop()
 
-        return "Playing"
+    def play_play_list(self):
+        if threading.active_count() == 1:
+            playlist_thread = threading.Thread(target=self.play_play_list, args=[])
+            playlist_thread.start()
+        else:
+            while self.song_queue.qsize() > 0:
+                self.player.play_song_blocking(self.song_queue.get())

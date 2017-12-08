@@ -4,3 +4,4 @@ class Album:
         self.id = id
         self.title = title
         self.file = file
+
