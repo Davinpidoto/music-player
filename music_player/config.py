@@ -4,8 +4,8 @@ import sys
 
 class Config:
 
-    LAVRY = "Lavry"
-    INTERNAL = "Internal"
+    LAVRY = "DA"
+    INTERNAL = "ALSA"
 
     if sys.platform == "darwin":
         SOURCE_ROOT = "/Users/davin/Music/iTunes/iTunes Media/Music"
