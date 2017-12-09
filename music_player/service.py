@@ -4,6 +4,7 @@ import sys
 from music_player.mysql_dao import MysqlDao
 from music_player.osx_player import OsxPlayer
 from music_player.linux_player import LinuxPlayer
+from music_player.loader import Loader
 
 
 class Service:
@@ -15,6 +16,11 @@ class Service:
             self.player = LinuxPlayer()
         self.dao = MysqlDao()
         self.song_queue = queue.Queue()
+        self.loader = Loader()
+
+    def load(self):
+        self.loader.sync()
+        return "Synced"
 
     def get_artists(self):
         return self.dao.get_artists()

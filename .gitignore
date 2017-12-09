@@ -8,3 +8,4 @@ devnotes.txt
 /dist/
 /*.egg-info
 node_modules
+scratch.py

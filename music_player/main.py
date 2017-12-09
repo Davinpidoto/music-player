@@ -59,6 +59,11 @@ def play_album(album):
     return service.play_album(album)
 
 
+@app.route('/load')
+def load():
+    return service.load()
+
+
 @app.route('/stop')
 def stop():
     service.stop()

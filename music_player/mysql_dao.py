@@ -51,11 +51,41 @@ class MysqlDao:
         return artist
 
     @staticmethod
+    def get_artist_by_name(artist_name):
+        session = MysqlDao.get_session()
+        artist = session.query(Artist).enable_eagerloads(False).filter_by(name=artist_name).first()
+        session.close()
+        return artist
+
+    @staticmethod
     def get_album(album_id):
         session = MysqlDao.get_session()
         album = session.query(Album).enable_eagerloads(True).get(album_id)
         session.close()
         return album
+
+    @staticmethod
+    def get_album_by_name(album_name):
+        session = MysqlDao.get_session()
+        album = session.query(Album).enable_eagerloads(False).filter_by(title=album_name).first()
+        session.close()
+        return album
+
+    @staticmethod
+    def get_song_by_file_name(file_name):
+        session = MysqlDao.get_session()
+        song = session.query(Song).enable_eagerloads(False).filter_by(file=file_name).first()
+        session.close()
+        return song
+
+    @staticmethod
+    def save_entity(entity):
+        session = MysqlDao.get_session()
+        session.add(entity)
+        session.commit()
+        session.refresh(entity)
+        session.close()
+        return entity
 
     @staticmethod
     def get_song_path(song_id):
