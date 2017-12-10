@@ -12,31 +12,30 @@ class Loader:
 
     def sync(self):
         artists = Loader.get_directories(Config.SOURCE_ROOT)
+        session = self.dao.get_session()
         for artist_name in artists:
-            print(artist_name)
-            session = self.dao.get_session()
             artist = self.dao.get_artist_by_name(artist_name, session)
             if artist is None:
                 artist = self.dao.save_entity(Artist(name=artist_name), session)
             self.save_albums(artist, session)
-            session.close()
+        session.close()
 
     def save_albums(self, artist, session):
         albums = self.get_directories("%s/%s" % (Config.SOURCE_ROOT, artist.name))
         for album_name in albums:
-            print("- " + album_name)
             album = self.dao.get_album_by_name(album_name, session)
             if album is None:
                 album = self.dao.save_entity(Album(title=album_name, artist_id=artist.id), session)
-            self.save_songs(album, artist.name, session)
+                self.save_songs(album, artist.name, session)
 
     def save_songs(self, album, artist_name, session):
         songs = self.get_files("%s/%s/%s" % (Config.SOURCE_ROOT, artist_name, album.title))
+        songs_to_persist = []
         for song_file in songs:
-            song = self.dao.get_song_by_file_name(song_file, session)
-            if song is None:
-                file = song_file[3:-4]
-                self.dao.save_entity(Song(title=file, file=song_file, album_id=album.id), session)
+            song_title = song_file[3:-4]
+            songs_to_persist.append(Song(title=song_title, file=song_file, album_id=album.id))
+        if len(songs_to_persist) > 0:
+            self.dao.bulk_save(songs_to_persist, session)
 
     @staticmethod
     def get_directories(directory):
@@ -44,4 +43,6 @@ class Loader:
 
     @staticmethod
     def get_files(directory):
-        return [f for f in listdir(directory) if isfile(join(directory, f)) & f.__contains__(".wav") & (f[:2] != "._")]
+        file_types = ['.wav', '.aif', '.mp3', 'm4a']
+        return [f for f in listdir(directory) if isfile(join(directory, f))
+                & file_types.__contains__(f[-4:]) & (f[:2] != "._")]

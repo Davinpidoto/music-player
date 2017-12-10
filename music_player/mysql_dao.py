@@ -52,8 +52,7 @@ class MysqlDao:
 
     @staticmethod
     def get_artist_by_name(artist_name, session):
-        artist = session.query(Artist).enable_eagerloads(False).filter_by(name=artist_name).first()
-        return artist
+        return session.query(Artist).enable_eagerloads(False).filter_by(name=artist_name).first()
 
     @staticmethod
     def get_album(album_id):
@@ -64,13 +63,11 @@ class MysqlDao:
 
     @staticmethod
     def get_album_by_name(album_name, session):
-        album = session.query(Album).enable_eagerloads(False).filter_by(title=album_name).first()
-        return album
+        return session.query(Album).enable_eagerloads(False).filter_by(title=album_name).first()
 
     @staticmethod
     def get_song_by_file_name(file_name, session):
-        song = session.query(Song).enable_eagerloads(False).filter_by(file=file_name).first()
-        return song
+        return session.query(Song).enable_eagerloads(False).filter_by(file=file_name).first()
 
     @staticmethod
     def save_entity(entity, session):
@@ -78,6 +75,11 @@ class MysqlDao:
         session.commit()
         session.refresh(entity)
         return entity
+
+    @staticmethod
+    def bulk_save(entities, session):
+        session.bulk_save_objects(entities)
+        session.commit()
 
     @staticmethod
     def get_song_path(song_id):
