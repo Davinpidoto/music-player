@@ -66,6 +66,12 @@ def load():
 
 @app.route('/stop')
 def stop():
+    service.clear()
+    return "Stopped"
+
+
+@app.route('/next')
+def next_track():
     service.stop()
     return "Stopped"
 
