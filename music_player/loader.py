@@ -43,6 +43,6 @@ class Loader:
 
     @staticmethod
     def get_files(directory):
-        file_types = ['.wav', '.aif', '.mp3', 'm4a']
+        file_types = ['.wav', '.aif', '.mp3', '.m4a']
         return [f for f in listdir(directory) if isfile(join(directory, f))
                 & file_types.__contains__(f[-4:]) & (f[:2] != "._")]
