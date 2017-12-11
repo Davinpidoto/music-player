@@ -38,6 +38,10 @@ var app = new Vue({
     .catch(function(error) {
       console.log(error);
      });
+    },
+    clearArtist: function() {
+      console.log('clear')
+      this.artist = ''
     }
   }
 })

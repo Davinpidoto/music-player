@@ -8,3 +8,8 @@ body {
 .topHeader {
   margin-bottom:20px;
 }
+.pager li>a, .pager li>span {
+  margin-top:-10px;
+  background-color: #E8E8E8;
+  border-radius: 10px;
+}
