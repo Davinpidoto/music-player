@@ -39,7 +39,7 @@ class MysqlDao:
     @staticmethod
     def get_artists():
         session = MysqlDao.get_session()
-        artists = session.query(Artist).enable_eagerloads(False).all()
+        artists = session.query(Artist).order_by(Artist.name).enable_eagerloads(False).all()
         session.close()
         return artists
 
