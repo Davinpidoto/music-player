@@ -3,7 +3,7 @@ from sqlalchemy.orm import sessionmaker
 from sqlalchemy.orm import relationship
 from sqlalchemy.ext.declarative import declarative_base
 from music_player.json_encoder import JsonSerializableBase
-import os
+from music_player.config import Config
 
 Base = declarative_base(cls=(JsonSerializableBase,))
 
@@ -95,7 +95,6 @@ class MysqlDao:
 
     @staticmethod
     def get_session():
-        url = os.environ['MYSQL_URL']
-        db = create_engine(url, echo=False)
+        db = create_engine(Config.MYSQL_URL, echo=False)
         Session = sessionmaker(bind=db)
         return Session()

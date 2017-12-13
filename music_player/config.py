@@ -6,6 +6,7 @@ class Config:
 
     LAVRY = "DA"
     INTERNAL = "ALSA"
+    MYSQL_URL = 'mysql+mysqlconnector://pi:pi@localhost:3306/music'
 
     if sys.platform == "darwin":
         SOURCE_ROOT = "/Users/davin/Music/iTunes/iTunes Media/Music"
