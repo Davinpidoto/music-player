@@ -33,68 +33,60 @@ class Song(Base):
 
 class MysqlDao:
 
-    def __init__(self):
-        pass
+    db = create_engine(Config.MYSQL_URL, echo=False)
+    Session = sessionmaker(bind=db)
+    session = Session()
 
     @staticmethod
     def get_artists():
-        session = MysqlDao.get_session()
-        artists = session.query(Artist).order_by(Artist.name).enable_eagerloads(False).all()
-        session.close()
+        artists = MysqlDao.session.query(Artist).order_by(Artist.name).enable_eagerloads(False).all()
+        MysqlDao.session.close()
         return artists
 
     @staticmethod
     def get_artist(artist_id):
-        session = MysqlDao.get_session()
-        artist = session.query(Artist).enable_eagerloads(True).get(artist_id)
-        session.close()
+        artist = MysqlDao.session.query(Artist).enable_eagerloads(True).get(artist_id)
+        MysqlDao.session.close()
         return artist
 
     @staticmethod
-    def get_artist_by_name(artist_name, session):
-        return session.query(Artist).enable_eagerloads(False).filter_by(name=artist_name).first()
+    def get_artist_by_name(artist_name):
+        return MysqlDao.session.query(Artist).enable_eagerloads(False).filter_by(name=artist_name).first()
 
     @staticmethod
     def get_album(album_id):
-        session = MysqlDao.get_session()
-        album = session.query(Album).enable_eagerloads(True).get(album_id)
-        session.close()
+        album = MysqlDao.session.query(Album).enable_eagerloads(True).get(album_id)
+        MysqlDao.session.close()
         return album
 
     @staticmethod
-    def get_album_by_name(album_name, session):
-        return session.query(Album).enable_eagerloads(False).filter_by(title=album_name).first()
+    def get_album_by_name(album_name):
+        return MysqlDao.session.query(Album).enable_eagerloads(False).filter_by(title=album_name).first()
 
     @staticmethod
-    def get_song_by_file_name(file_name, session):
-        return session.query(Song).enable_eagerloads(False).filter_by(file=file_name).first()
+    def get_song_by_file_name(file_name):
+        return MysqlDao.session.query(Song).enable_eagerloads(False).filter_by(file=file_name).first()
 
     @staticmethod
-    def save_entity(entity, session):
-        session.add(entity)
-        session.commit()
-        session.refresh(entity)
+    def save_entity(entity):
+        MysqlDao.session.add(entity)
+        MysqlDao.session.commit()
+        MysqlDao.session.refresh(entity)
         return entity
 
     @staticmethod
-    def bulk_save(entities, session):
-        session.bulk_save_objects(entities)
-        session.commit()
+    def bulk_save(entities):
+        MysqlDao.session.bulk_save_objects(entities)
+        MysqlDao.session.commit()
 
     @staticmethod
     def get_song_path(song_id):
-        session = MysqlDao.get_session()
-        result = session.execute("""SELECT group_concat( concat( name, "/",albums.title,"/",file )) FROM songs join albums on songs.album_id = 
+        result = MysqlDao.session.execute("""SELECT group_concat( concat( name, "/",albums.title,"/",file )) FROM songs join albums on songs.album_id = 
         albums.id inner join artists on albums.artist_id = artists.id where songs.id = """ + song_id + ';')
         rows = []
         for row in result:
             rows.append(row[0])
-        session.close()
+        MysqlDao.session.close()
 
         return row[0]
 
-    @staticmethod
-    def get_session():
-        db = create_engine(Config.MYSQL_URL, echo=False)
-        Session = sessionmaker(bind=db)
-        return Session()

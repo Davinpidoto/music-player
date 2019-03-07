@@ -48,7 +48,7 @@ class Service:
         return album_to_play.title
 
     def clear(self):
-        self.song_queue = queue.Queue()
+        self.song_queue.queue.clear()
         self.stop()
 
     def play_play_list(self):
