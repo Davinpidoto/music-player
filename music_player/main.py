@@ -1,4 +1,5 @@
 import json
+import logging
 
 from music_player.service import Service
 from music_player.artist import Artist
@@ -10,7 +11,7 @@ from flask_cors import CORS
 app = Flask(__name__)
 CORS(app)
 service = Service()
-print("Sound Card: %s" % Config.SOUND_CARD)
+logging.info("Sound Card: %s" % Config.SOUND_CARD)
 
 
 @app.route('/')
