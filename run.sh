@@ -3,3 +3,4 @@
 source /home/pi/.virtualenvs/music-player/bin/activate
 export PYTHONPATH=/home/pi/music-player
 python /home/pi/music-player/music_player/main.py
+amixer sset PCM,0 90%

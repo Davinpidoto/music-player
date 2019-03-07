@@ -1,5 +1,6 @@
 import json
 import logging
+import threading
 
 from music_player.service import Service
 from music_player.artist import Artist
@@ -77,5 +78,10 @@ def next_track():
     return "Stopped"
 
 
+@app.route('/threads')
+def threads():
+    return str(threading.active_count())
+
+
 if __name__ == "__main__":
-    app.run(host='0.0.0.0', port=8080)
+    app.run(host='0.0.0.0', port=8080, threaded=True)
