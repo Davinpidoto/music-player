@@ -33,7 +33,7 @@ class Song(Base):
 
 class MysqlDao:
 
-    db = create_engine(Config.MYSQL_URL, echo=False)
+    db = create_engine(Config.MYSQL_URL, echo=False, pool_pre_ping=True)
     Session = sessionmaker(bind=db)
     session = Session()
 
